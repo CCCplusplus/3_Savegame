@@ -3015,8 +3015,178 @@ void Stage3(SGameData& data, std::fstream& save)
 
 void Pocion(SGameData& data, std::fstream& save)
 {
-    Log("Obtuviste la pocima yay :D fin");
-    Log("(Luego pondre un final de verdad pero por ahora tengo sueño.)");
+    Log("*Con un ultimo rugido la manticora cae, antes de que puedas dar el golpe de gracia usa su alas para huir.*");
+    Log("*Exhausto caes sobre una de tus rodillas y recuperas tu aliento.*");
+    Log("*Tus ojos fijos en tu premio, la pocima en el pedestal.*");
+    Log("*Con esfuerzo te levantas y caminas hasta ella. tus dedos se cierran alrededor de la botella*");
+    NLog(data, "Obtiene la botella!");
+    Log("*Te dispones a regresar truinfal pero una vocesita dentro de ti te detiene.*");
+    Log("*Debería beber la pocima? Se supone que me haria mas fuerte mucho mas fuerte...*");
+    std::string Answer;
+    do
+    {
+        Log("1. 'No'");
+        Log("2. 'Si'");
+        std::cin >> Answer;
+
+        if (Answer == "1") 
+        {
+            save.close();
+            data.progress = 10;
+            data.path = 1;
+            save.open("data.sav", std::ios::out);
+            if (save.is_open())
+            {
+                //dumpear la estructura data
+                save.seekp(0, std::ios::beg);
+                save.write((const char*)&data, sizeof(SGameData));
+            }
+            else
+            {
+                Log("no se pudo crear el archivo");
+            }
+        }
+        else if (Answer == "2") 
+        {
+            save.close();
+            data.progress = 10;
+            data.path = 2;
+            save.open("data.sav", std::ios::out);
+            if (save.is_open())
+            {
+                //dumpear la estructura data
+                save.seekp(0, std::ios::beg);
+                save.write((const char*)&data, sizeof(SGameData));
+            }
+            else
+            {
+                Log("no se pudo crear el archivo");
+            }
+        }
+        else
+        {
+            Log("Respuesta no valida, porfavor vuelva a intentar.");
+        }
+
+    } while (Answer != "1" && Answer != "2");
+
+    Log("Quieres continuar?");
+    do
+    {
+        Log("*Presiona Q para salir y C para continuar");
+        std::cin >> Answer;
+
+        if (Answer == "C" || Answer == "c")
+        {
+            Log("Continuando");
+        }
+        else if (Answer == "Q" || Answer == "q")
+        {
+            Log("Salvando.");
+            Log("Saliendo del juego");
+            exit(0);
+        }
+        else
+        {
+            Log("Respuesta no valida, porfavor vuelva a intentar.");
+        }
+    } while (Answer != "q" && Answer != "Q" && Answer != "c" && Answer != "C");
+}
+
+void GodEnding(SGameData& data, std::fstream& save)
+{
+    Log("Mel ya te habia advertido de esto, quien tome la pocima sin permiso sera marcado como traedor.");
+    Log("Y los traedores del gremio de heroes son perseguidos hasta la muerte.");
+    Log("Sin importar que tan fuerte te vuelvas no crees poder vencer a todo el gremio.");
+    Log("Decides que lo mejor es no beber la pocima.");
+
+    Log("Presiona cualquier tecla mas 'Enter'");
+    std::string Answer;
+    std::cin >> Answer;
+
+    Log("Regresas por el bosque, en el camino no encuentras ninguna dificultad. Es como si los residentes del bosque supieran de tu victoria!");
+    Log("Finalmente te encuentras con Mel");
+    Log("Mel: huh. No pense que te volveria a ver.");
+    Log("Mel: Supongo que ya no puedo tratarte como un mocoso, ahora somos compañeros de trabajo.");
+    Log("Mel: Ven, te invitare una cerveza en la taverna para celebrar. Quizas en el camino pueda enseñarte un hechizo o dos.");
+    Log("*Mel nunca habia sido tan amable contigo. La manera en la que te ve a cambiado por completo.*");
+    Log("*realmente debes de haberte vuelto un heroe! Y esto es solo el principio*");
+    Log("*Propones volverte el heroe mas grande de todos los tiempos!*");
+    Log("'Fin!'");
+
+    std::cout << "Stats Finales. ";
+    std::cout << data.attack << " Puntos de Ataque " << "\n";
+    std::cout << data.defense << " Puntos de Defesa " << "\n";
+    std::cout << data.skill << " Puntos de Habilidad " << "\n";
+    std::cout << data.maxhp << " Puntos de Vida maximos " << "\n";
+    std::cout << "Tu arma fue " << data.currentWeapon << "\n";
+    std::cout << "Derrotaste a " << data.enemysKilled << "\n";
+
+    Log("'Gracias por jugar'");
+}
+
+void BadEnging(SGameData& data, std::fstream& save)
+{
+    Log("Por que no? Despues de todo, tu fuiste el que obtuvo. Es tu premio por llegar tan lejos.");
+    Log("Si alguien merece este poder eres tu!");
+    Log("*Sin pensarlo mas destapas la botella y bebes su contenido!*");
+    Log("*El poder que sientes es incomparable*");
+    Log("*Todos tus stats se quintuplican*");
+    data.attack *= 5;
+    data.defense *= 5;
+    data.skill *= 5;
+    data.maxhp *= 5;
+
+    std::cout << "Ahora tienes. " << data.attack << " Puntos de Ataque " << "\n";
+    std::cout << "Ahora tienes. " << data.defense << " Puntos de Defensa " << "\n";
+    std::cout << "Ahora tienes. " << data.skill << " Puntos de Habilidad " << "\n";
+    std::cout << "Ahora tienes. " << data.maxhp << " Puntos de Vida " << "\n";
+
+    Log("Con tanto poder en tu cuerpo estas seguro que eres invencible!");
+    Log("Estas seguro que podras tomar el control del Gremio!");
+    Log("Y lo primero que haras sera enseñarle una leccion a mel.");
+
+    Log("Presiona cualquier tecla mas 'Enter'");
+
+    std::string Answer;
+    std::cin >> Answer;
+
+    Log("Regresas por el bosque, en el camino no encuentras ninguna dificultad. Los residentes del bosque estaban claramente intimidados por tu poder!");
+    Log("Finalmente te encuentras con Mel");
+    Log("Mel: huh. No pense que te volveria a ver.");
+    Log("Mel: Espera, y la pocima?");
+    Log("*Sonries preparando tu arma*");
+    Log("Mel: Oh! ya veo, es una lastima claramente tenias potencial, pero parece que no eres muy listo");
+    Log("Las palabras de Mel ya no podran intimidarte. Estas listo para ella");
+    Log("De hecho las pocion desbloquea un nuevo poder, puedes analizar a Mel y ver su verdadero poder");
+    Log("Mel of the purple lighting stats: Puntos de ataque 1331, Puntos de Defensa 1103, Puntos de Habilidad 1512, Puntos de Vida 2123");
+    Log("*Tu cara empalidece*");
+    Log("Mel: Parece que entiendes el terrible error que cometiste, nene.");
+    Log("Mel: La pocima es un desperdicio en una lombriz como tu.");
+    Log("Mel: Adios, prometo no extrañarte.");
+    Log("*Lo ultimo que ves es un luz morado, probablemente un rayo.*");
+    Log("*Mel ato tu cuerpo a tu caballo y te arrastro hasta la ciudad.*");
+    Log("*Donde tu cabeza fue puesta en una lanza, una advertencia para los traidores.*");
+    Log("*Creo que no debiste haber bebido la pocima.*");
+    Log("Fin");
+
+    save.close();
+    data.progress = 9;
+    data.attack *= 5;
+    data.defense *= 5;
+    data.skill *= 5;
+    data.maxhp += 5;
+    save.open("data.sav", std::ios::out);
+    if (save.is_open())
+    {
+        //dumpear la estructura data
+        save.seekp(0, std::ios::beg);
+        save.write((const char*)&data, sizeof(SGameData));
+    }
+    else
+    {
+        Log("no se pudo crear el archivo");
+    }
 }
 
 int main()
@@ -3067,7 +3237,7 @@ int main()
                 {
                     // Usuario ha decidido usar este archivo de guardado.
                     LogN("Bienvenido", data);
-                    Log("Al bosque del incio!");
+                    Log("Al bosque del inicio!");
                     Log("Estas aqui para demostrar que tienes lo necesario para ser un Heroe!");
                     Log("Vienes con una examinadora del gremio de heroes, ella puede resolver tus dudas.");
                     Log("Buena suerte, persiona cualquier tecla para continuar");
@@ -3103,6 +3273,11 @@ int main()
                     Proceso(data, savefile);
                     Stage3(data, savefile);
                     Pocion(data, savefile);
+                    if (data.path == 1)
+                        Proceso = &GodEnding;
+                    else if (data.path == 2)
+                        Proceso = &BadEnging;
+                    Proceso(data, savefile);
                 }
                 else if (data.progress == 2 && Answer == "1") 
                 {
@@ -3122,6 +3297,11 @@ int main()
                     Proceso(data, savefile);
                     Stage3(data, savefile);
                     Pocion(data, savefile);
+                    if (data.path == 1)
+                        Proceso = &GodEnding;
+                    else if (data.path == 2)
+                        Proceso = &BadEnging;
+                    Proceso(data, savefile);
                 }
                 else if (data.progress == 3 && Answer == "1")
                 {
@@ -3140,6 +3320,11 @@ int main()
                     Proceso(data, savefile);
                     Stage3(data, savefile);
                     Pocion(data, savefile);
+                    if (data.path == 1)
+                        Proceso = &GodEnding;
+                    else if (data.path == 2)
+                        Proceso = &BadEnging;
+                    Proceso(data, savefile);
                 }
                 else if (data.progress == 4 && Answer == "1")
                 {
@@ -3157,6 +3342,11 @@ int main()
                     Proceso(data, savefile);
                     Stage3(data, savefile);
                     Pocion(data, savefile);
+                    if (data.path == 1)
+                        Proceso = &GodEnding;
+                    else if (data.path == 2)
+                        Proceso = &BadEnging;
+                    Proceso(data, savefile);
                 }
                 else if (data.progress == 5 && Answer == "1")
                 {
@@ -3174,6 +3364,11 @@ int main()
                     Proceso(data, savefile);
                     Stage3(data, savefile);
                     Pocion(data, savefile);
+                    if (data.path == 1)
+                        Proceso = &GodEnding;
+                    else if (data.path == 2)
+                        Proceso = &BadEnging;
+                    Proceso(data, savefile);
                 }
                 else if (data.progress == 6 && Answer == "1") 
                 {
@@ -3185,6 +3380,11 @@ int main()
                     Proceso(data, savefile);
                     Stage3(data, savefile);
                     Pocion(data, savefile);
+                    if (data.path == 1)
+                        Proceso = &GodEnding;
+                    else if (data.path == 2)
+                        Proceso = &BadEnging;
+                    Proceso(data, savefile);
                 }
                 else if (data.progress == 7 && Answer == "1")
                 {
@@ -3195,15 +3395,38 @@ int main()
                     Proceso(data, savefile);
                     Stage3(data, savefile);
                     Pocion(data, savefile);
+                    if (data.path == 1)
+                        Proceso = &GodEnding;
+                    else if (data.path == 2)
+                        Proceso = &BadEnging;
+                    Proceso(data, savefile);
                 }
                 else if (data.progress == 8 && Answer == "1")
                 {
                     Stage3(data, savefile);
                     Pocion(data, savefile);
+                    if (data.path == 1)
+                        Proceso = &GodEnding;
+                    else if (data.path == 2)
+                        Proceso = &BadEnging;
+                    Proceso(data, savefile);
                 }
                 else if (data.progress == 9 && Answer == "1") 
                 {
                     Pocion(data, savefile);
+                    if (data.path == 1)
+                        Proceso = &GodEnding;
+                    else if (data.path == 2)
+                        Proceso = &BadEnging;
+                    Proceso(data, savefile);
+                }
+                else if (data.progress == 10 && Answer == "1")
+                {
+                    if (data.path == 1)
+                        Proceso = &GodEnding;
+                    else if (data.path == 2)
+                        Proceso = &BadEnging;
+                    Proceso(data, savefile);
                 }
                 else if (Answer == "2")
                 {
